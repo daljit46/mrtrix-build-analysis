@@ -1,1 +1,47 @@
+name: Build Analysis for MRtrix
 
+on:
+  push:
+  # Run every Sunday at 00:00 UTC
+  schedule:
+    - cron: '0 0 * * 0'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: sudo apt-get install clang qt6-base-dev libglvnd-dev libeigen3-dev zlib1g-dev libfftw3-dev ninja-build
+
+    - name: Clone Clang Build Analyzer
+      run: git clone https://github.com/aras-p/ClangBuildAnalyzer
+
+    - name: Clone MRtrix
+      run: git clone https://github.com/mrtrix3/mrtrix3
+
+    - name: Build Clang Build Analyzer
+      run: |
+        cd ClangBuildAnalyzer
+        cmake -B build -G Ninja
+        cmake --build build
+        sudo cmake --install build
+
+    - name: Configure MRtrix
+      run: |
+        cd mrtrix3
+        cmake -B build -G Ninja -D CMAKE_CXX_COMPILER=clang++ -D CMAKE_CXX_FLAGS="-ftime-trace"
+
+    - name: Start capture
+      run: ClanBuildAnalyzer --start mrtrix3/build
+
+    - name: Build MRtrix
+      run: cmake --build mrtrix3/build
+
+    - name: Stop capture
+      run: ClanBuildAnalyzer --stop mrtrix3/build capture_file
+
+    - name: Analyze build
+      run: ClanBuildAnalyzer --analyze ./capture_file
