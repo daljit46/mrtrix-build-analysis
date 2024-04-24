@@ -33,7 +33,7 @@ jobs:
     - name: Configure MRtrix
       run: |
         cd mrtrix3
-        cmake -B build -G Ninja -D CMAKE_CXX_COMPILER=clang++ -D CMAKE_CXX_FLAGS="-ftime-trace"
+        cmake -B build -G Ninja -D CMAKE_CXX_COMPILER=clang++ -D CMAKE_CXX_FLAGS="-ftime-trace" -DMRTRIX_BUILD_TESTS=ON
 
     - name: Start capture
       run: ClangBuildAnalyzer --start mrtrix3/build
