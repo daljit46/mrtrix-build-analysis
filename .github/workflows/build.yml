@@ -21,7 +21,7 @@ jobs:
       run: git clone https://github.com/aras-p/ClangBuildAnalyzer
 
     - name: Clone MRtrix
-      run: git clone https://github.com/mrtrix3/mrtrix3 -b dev
+      run: git clone https://github.com/mrtrix3/mrtrix3 -b improve_build
 
     - name: Build Clang Build Analyzer
       run: |
