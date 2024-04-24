@@ -52,7 +52,7 @@ jobs:
 
     - name: Run NinjaTracing
       run: |
-        ./ninjatracing/ninjatracing.py  build/.ninja_log > trace.json 
+        ./ninjatracing/ninjatracing.py  mrtrix3/build/.ninja_log > trace.json 
 
     - name: Upload trace
       uses: actions/upload-artifact@v2
